@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 class mainController extends Controller
 {
     public function homePage(){
-        return '<h1>This is the Home page</h1><p><a href="/about">Go to about page</a></p>';
+        $name = 'Qadeer Khan';
+        $stack = ['Django','Django Rest Framework','Laravel'];
+        return view('homepage',['stack' => $stack , 'name' => $name]);
     }
     public function aboutPage(){
-        return '<h1>This is the About page</h1><p><a href="/">Go to home page</a></p>';
+        return view('single-post');
     }
 }
