@@ -15,7 +15,24 @@ class UserController extends Controller
             'password' => ['required','min:6','confirmed']
         ]);
         $validated_data['password'] = bcrypt($validated_data['password']);
-        User::create($validated_data);
-        return "Hello from register view";
+        $user = User::create($validated_data);
+        auth()->login($user);
+        return redirect('/')->with('success','Account created successfully. You are now logged in.');
+    }
+    public function loginUser(Request $request){
+        $validated_data = $request->validate([
+            'loginusername' =>  'required',
+            'loginpassword' => 'required'
+        ]);
+        if(auth()->attempt(['username' => $validated_data['loginusername'],'password' => $validated_data['loginpassword']])){
+            $request->session()->regenerate();
+            return redirect('/')->with('success','You are now logged in.');
+        }else{
+            return redirect('/')->with('fail','Invalid login credentials.');
+        }
+    }
+    public function logoutUser(){
+        auth()->logout();
+        return redirect('/')->with('success','You are now logged out.');;
     }
 }
